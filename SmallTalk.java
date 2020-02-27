@@ -8,7 +8,7 @@ step 4 find the fastest posible route by directionaly based algorithims
 */
      
 
-public static boolean high position(board, highX, highY){
+public static boolean Jail(board, highX, highY){
 	boolean isJail = false;
 	int wall = 0;
 	
@@ -37,9 +37,13 @@ public static boolean high position(board, highX, highY){
             }
         }
 	}
+
+    return isJail;
 }
 
-public static boolean checkJail(startX)
+public static boolean checkJail(startX, startY){
+    if(startX)
+}
 
 Alg(board, player position, highTilePosition){           
 	if(	
