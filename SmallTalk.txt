@@ -1,28 +1,182 @@
-Search:
-Step 1 imediatly eliminate any death cells next to the robot
-Step 2 find the highest cell on the grid
-Step 3 check its not surrounded by death
-if no cont. else check next highest
-step 4 find the fastest posible route by directionaly based algorithims
-     
-
-public static int[] high position(board, highX, highY){
-	boolean isJail = false;
-	boolean wallLeft = false; 
-	boolean wallRight = false; 
-	boolean wallDown = false;
-	boolean wallUp = false;
-	int[] pos = {highX, highY}
-	for(int i = 1; i < 11; i++){
-		if(board.position(highX + i, highY).isDeath()){
-			if(board.position(highX + i, highY + 1).isDeath() && board.position(highX + i, highY - 1).isDeath()){
-				wall
-			}
+string dir = right();
+ArrayList <Path> paths = new ArrayList(); // Path(int total, int x, int y, String pathway)
+int moves = 0;// add one every time it moved
+String lastMove; // L,R,U or D based on what direction the robot last moved
+run(board, int x, int y){//continuously runs the whole time
+	if(!board(x + 1, y).death){
+		if(board(x + 1, y).jump){
+			paths.add(new Path(board.value(x + jumpValue, y), x + jumpValue, y, "R");
+		}else if(board(x + 1, y).teleport){
+			paths.add(new Path(board.value(teleportTo.x, teleportTo.y), teleportTo.x, teleportTo.y, "R");
+		}else{
+			paths.add(new Path(board.value(x + 1, y), x + 1, y, "R");
 		}
 	}
-	
-}
+	if(!board(x - 1, y).death){
+		if(board(x - 1, y).jump){
+			paths.add(new Path(board.value(x - jumpValue, y), x - jumpValue, y, "L");
+		}else if(board(x - 1, y).teleport){
+			paths.add(new Path(board.value(teleportTo.x, teleportTo.y), teleportTo.x, teleportTo.y, "L");
+		}else{
+			paths.add(new Path(board.value(x - 1, y), x - 1, y, "L");
+		}
+	}
+	if(!board(x, y + 1).death){
+		if(board(x, y + 1).jump){
+			paths.add(new Path(board.value(x, y + jumpValue), x, y + jumpValue, "D");
+		}else if(board(x, y + 1).teleport){
+			paths.add(new Path(board.value(teleportTo.x, teleportTo.y), teleportTo.x, teleportTo.y, "D");
+		}else{
+			paths.add(new Path(board.value(x, y + 1), x, y + 1, "D");
+		}
+	}
+	if(!board(x, y - 1).death){
+		if(board(x, y - 1).jump){
+			paths.add(new Path(board.value(x, y - jumpValue), x, y - jumpValue, "U");
+		}else if(board(x, y - 1).teleport){
+			paths.add(new Path(board.value(teleportTo.x, teleportTo.y), teleportTo.x, teleportTo.y, "U");
+		}else{
+			paths.add(new Path(board.value(x, y - 1), x, y - 1, "U");
+		}
+	}
+	while(paths.get(0).pathway.length() < maxMoves){
+		if(moves > 0){
+			while(paths.get(0).pathway.substring(moves - 1, moves) != lastMove){
+				paths.remove(0);
+			}
+		}
+		if(paths.get(0).pathway.substring(moves, moves + 1) == "L"){	
+			if(!board(paths.get(0).x - 1, paths.get(0).y).death){
+				if(board(paths.get(0).x - 1, paths.get(0).y).jump){
+					paths.add(new Path(board.value(paths.get(0).x - jumpValue, y) + paths.get(0).total, paths.get(0).x - jumpValue, paths.get(0).y, paths.get(0).pathway + "L");
+				}else if(board(paths.get(0).x - 1, paths.get(0).y).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "L");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x - 1, y) + paths.get(0).total, paths.get(0).x - 1, paths.get(0).y, paths.get(0).pathway + "L");
+				}
+			}	
+			if(!board(paths.get(0).x, paths.get(0).y + 1).death){
+				if(board(paths.get(0).x, paths.get(0).y + 1).jump){
+					paths.add(new Path(board.value(paths.get(0).x, y + jumpValue) + paths.get(0).total, paths.get(0).x, paths.get(0).y + jumpValue, paths.get(0).pathway + "D");
+				}else if(board(paths.get(0).x, paths.get(0).y + 1).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "D");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x, y + 1) + paths.get(0).total, paths.get(0).x, paths.get(0).y + 1, paths.get(0).pathway + "D");
+				}
+			}
+			if(!board(paths.get(0).x, paths.get(0).y - 1).death){
+				if(board(paths.get(0).x, paths.get(0).y - 1).jump){
+					paths.add(new Path(board.value(paths.get(0).x, y - jumpValue) + paths.get(0).total, paths.get(0).x, paths.get(0).y - jumpValue, paths.get(0).pathway + "U");
+				}else if(board(paths.get(0).x, paths.get(0).y - 1).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "U");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x, y - 1) + paths.get(0).total, paths.get(0).x, paths.get(0).y - 1, paths.get(0).pathway + "U");
+				}
+			}
+		}else if(paths.get(0).pathway.substring(moves, moves + 1) == "R"){
+			if(!board(paths.get(0).x + 1, paths.get(0).y).death){
+				if(board(paths.get(0).x + 1, paths.get(0).y).jump){
+					paths.add(new Path(board.value(paths.get(0).x + jumpValue, y) + paths.get(0).total, paths.get(0).x + jumpValue, paths.get(0).y, paths.get(0).pathway + "R");
+				}else if(board(paths.get(0).x + 1, paths.get(0).y).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "R");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x + 1, y) + paths.get(0).total, paths.get(0).x + 1, paths.get(0).y, paths.get(0).pathway + "R");
+				}
+			}	
+			if(!board(paths.get(0).x, paths.get(0).y + 1).death){
+				if(board(paths.get(0).x, paths.get(0).y + 1).jump){
+					paths.add(new Path(board.value(paths.get(0).x, y + jumpValue) + paths.get(0).total, paths.get(0).x, paths.get(0).y + jumpValue, paths.get(0).pathway + "D");
+				}else if(board(paths.get(0).x, paths.get(0).y + 1).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "D");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x, y + 1) + paths.get(0).total, paths.get(0).x, paths.get(0).y + 1, paths.get(0).pathway + "D");
+				}
+			}
+			if(!board(paths.get(0).x, paths.get(0).y - 1).death){
+				if(board(paths.get(0).x, paths.get(0).y - 1).jump){
+					paths.add(new Path(board.value(paths.get(0).x, y - jumpValue) + paths.get(0).total, paths.get(0).x, paths.get(0).y - jumpValue, paths.get(0).pathway + "U");
+				}else if(board(paths.get(0).x, paths.get(0).y - 1).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "U");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x, y - 1) + paths.get(0).total, paths.get(0).x, paths.get(0).y - 1, paths.get(0).pathway + "U");
+				}
+			}
+		}else if(paths.get(0).pathway.substring(moves, moves + 1) == "U"){
+			if(!board(paths.get(0).x + 1, paths.get(0).y).death){
+				if(board(paths.get(0).x + 1, paths.get(0).y).jump){
+					paths.add(new Path(board.value(paths.get(0).x + jumpValue, y) + paths.get(0).total, paths.get(0).x + jumpValue, paths.get(0).y, paths.get(0).pathway + "R");
+				}else if(board(paths.get(0).x + 1, paths.get(0).y).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "R");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x + 1, y) + paths.get(0).total, paths.get(0).x + 1, paths.get(0).y, paths.get(0).pathway + "R");
+				}
+			}
+			if(!board(paths.get(0).x - 1, paths.get(0).y).death){
+				if(board(paths.get(0).x - 1, paths.get(0).y).jump){
+					paths.add(new Path(board.value(paths.get(0).x - jumpValue, y) + paths.get(0).total, paths.get(0).x - jumpValue, paths.get(0).y, paths.get(0).pathway + "L");
+				}else if(board(paths.get(0).x - 1, paths.get(0).y).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "L");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x - 1, y) + paths.get(0).total, paths.get(0).x - 1, paths.get(0).y, paths.get(0).pathway + "L");
+				}
+			}
+			if(!board(paths.get(0).x, paths.get(0).y - 1).death){
+				if(board(paths.get(0).x, paths.get(0).y - 1).jump){
+					paths.add(new Path(board.value(paths.get(0).x, y - jumpValue) + paths.get(0).total, paths.get(0).x, paths.get(0).y - jumpValue, paths.get(0).pathway + "U");
+				}else if(board(paths.get(0).x, paths.get(0).y - 1).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "U");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x, y - 1) + paths.get(0).total, paths.get(0).x, paths.get(0).y - 1, paths.get(0).pathway + "U");
+				}
+			}	
+		}else{
+			if(!board(paths.get(0).x + 1, paths.get(0).y).death){
+				if(board(paths.get(0).x + 1, paths.get(0).y).jump){
+					paths.add(new Path(board.value(paths.get(0).x + jumpValue, y) + paths.get(0).total, paths.get(0).x + jumpValue, paths.get(0).y, paths.get(0).pathway + "R");
+				}else if(board(paths.get(0).x + 1, paths.get(0).y).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "R");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x + 1, y) + paths.get(0).total, paths.get(0).x + 1, paths.get(0).y, paths.get(0).pathway + "R");
+				}
+			}
+			if(!board(paths.get(0).x - 1, paths.get(0).y).death){
+				if(board(paths.get(0).x - 1, paths.get(0).y).jump){
+					paths.add(new Path(board.value(paths.get(0).x - jumpValue, y) + paths.get(0).total, paths.get(0).x - jumpValue, paths.get(0).y, paths.get(0).pathway + "L");
+				}else if(board(paths.get(0).x - 1, paths.get(0).y).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "L");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x - 1, y) + paths.get(0).total, paths.get(0).x - 1, paths.get(0).y, paths.get(0).pathway + "L");
+				}
+			}
+			if(!board(paths.get(0).x, paths.get(0).y + 1).death){
+				if(board(paths.get(0).x, paths.get(0).y + 1).jump){
+					paths.add(new Path(board.value(paths.get(0).x, y + jumpValue) + paths.get(0).total, paths.get(0).x, paths.get(0).y + jumpValue, paths.get(0).pathway + "D");
+				}else if(board(paths.get(0).x, paths.get(0).y + 1).teleport){
+					paths.add(new Path(board.value(teleportTo.x, teleportTo.y) + paths.get(0).total, teleportTo.x, teleportTo.y, paths.get(0).pathway + "D");
+				}else{
+					paths.add(new Path(board.value(paths.get(0).x, y + 1) + paths.get(0).total, paths.get(0).x, paths.get(0).y + 1, paths.get(0).pathway + "D");
+				}
+			}
+		}
+		paths.remove(0);
+	}
+}//end run
 
-Alg(board, player position, highTilePosition){           
-	if(	
+move(){
+	int index = 0;
+	for(int i = 1; i < paths.size(); i ++){
+		if(paths.get(i).total > paths.get(index)){
+			index = i;
+		}
+	}
+	if(paths.get(index).pathway.substring(moves, moves + 1) == R){
+		moveRight();
+	}else if(paths.get(index).pathway.substring(moves, moves + 1) == L){
+		moveLeft();
+	}else if(paths.get(index).pathway.substring(moves, moves + 1) == U){
+		moveUp();
+	}else{
+		moveDown();
+	}
+	moves++;
 }
